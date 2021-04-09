@@ -1,10 +1,8 @@
 <h1 align='center'>Vertage Discord Bot</h1>
 
 <div align="center">
-[![Node](https://img.shields.io/badge/Node-v14-green)](https://nodejs.org/en/)]
-
+<h4>Node v12+</h4>
 <p>Coded by No_Poker</p>
-
 
 </div>
 
