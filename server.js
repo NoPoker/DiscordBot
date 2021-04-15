@@ -9,7 +9,10 @@ const Canvas = require('canvas');
 const { readdirSync } = require('fs');
 const { join } = require('path');
 const path = require('path')
+const embeds = require('./system/systemEmbeds');
 const filePath = path.join('./commands/', 'info', 'info.txt')
+
+
 
 
 /**
@@ -56,7 +59,7 @@ client.on('ready', () => {
 });
 
 client.on('ready', () => {
-  let status = ['Vertage US Network','Vertage US Network | #help']
+  let status = ['Vertage US Network','Vertage US Network | $help']
   let status_res = Math.floor(Math.random() * status.length)
  client.user.setActivity(status[status_res], {type: "PLAYING",url:'https://www.twitch.tv/NotPoker',}, 1)
 })
@@ -107,7 +110,7 @@ client.on("message", message => {
   if (message.author.bot) return;
   if (!message.guild) return;
 
-  const Discord = require("discord.js")
+
 
   let uid = message.author.id;
   const forInfoFile = message.author.tag;
@@ -165,25 +168,24 @@ client.on("message", message => {
     }
 
     try { //TRY TO GET COMMAND AND EXECUTE
+
       client.commands.get(command).execute(client, message, args)
+
       //COMMAND LOGS
+
       console.log(`${message.guild.name}: ${message.author.tag} Used ${client.commands.get(command).name} in #${message.channel.name}`)
+
     } catch (err) { //IF IT CATCH ERROR
+
       console.log(err)
-      let embed = new Discord.MessageEmbed()
-        .setAuthor("Vertage Bot Commands", `${client.user.displayAvatarURL()}`)
-        .addField("WARNING", "I am getting error on using this command")
-        .addField("Error:", `${err}`)
-        .addField("CONSOLE", "```" + `${console.error}\n` + "```")
-        .setFooter("Vertage(US)", "https://cdn.discordapp.com/avatars/726790345265774673/f06205d8612068386f5926ec3fcccff3.png?size=2048")
-      message.reply(embed)
+
+      message.reply(embeds.embedErr(`Bot Error`, `WARNING`, `I am getting error on using this command`, 'Vertage(US)' , client.user.displayAvatarURL()))
+      
     }
 
   }
 
-
 });
-
 
 
 /**
@@ -240,10 +242,8 @@ client.on('guildMemberAdd', async member => {
 
 	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
-  let newGM = new Discord.MessageEmbed()
-  .setAuthor("Vertage", "https://cdn.discordapp.com/avatars/726790345265774673/951e2b43bbc1b31af443a197d97f5182.png?size=128")
-  .setTitle(`Hey, ${member.user.tag} ! Welcome to the Vertage Network!`)
-  channel.send(newGM)
+
+  channel.send(embeds.embedTitle('', 'https://cdn.discordapp.com/avatars/726790345265774673/951e2b43bbc1b31af443a197d97f5182.png?size=128', `Hey, ${member.user.tag}`))
 	channel.send(attachment);
 });
 
@@ -287,5 +287,35 @@ client.on('messageReactionRemove', async (reaction, user) => {
   }
 
 })
+
+setInterval(() => {
+  client.on('guildCreate', guild  => {
+    const channel = guild.channels.find('name', 'logs')
+    if(channel == undefined || channel == null) {
+      guild.createChannel('logs')
+    }
+  }) 
+
+  client.on('message' , message => {
+    const path = require('path')
+    const filePath = path.join(__dirname, 'commands/info', 'info.txt')
+    const fs = require('fs')
+  
+    fs.readFile(filePath, 'utf-8' , (err,content) => {
+      
+      if (err) {
+          throw err
+      }
+      
+      message.channel.send(embeds.embedAFKF(`Vertage Logs`, `Logs:`, content, COLOR, `Vertage(US)`, client.user.displayAvatarURL()));
+  })
+  })
+
+
+
+},900000)
+
+
+
 
 client.login(TOKEN)

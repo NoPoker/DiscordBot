@@ -7,7 +7,6 @@ module.exports = {
   execute (client, message, args) {
     
     let inline = true
-    let resence = true
     const status = {
         online: "Online",
         idle: "Idle",
@@ -17,15 +16,14 @@ module.exports = {
     
         
 const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+
 let target = message.mentions.users.first() || message.author
+
 const osConfigurate = os.platform()
 let osSend
 
-if (member.user.bot === true) {
-    bot = " Yes";
-  } else {
-    bot = " Not";
-  }
+let bot = (member.user.bot === true) ? ' Yes' : ' Not'
+
   if (osConfigurate == 'darwin') {osSend = 'MacOS'} 
   if (osConfigurate == 'win32') {osSend = 'Windows'}
             let embed = new Discord.MessageEmbed()
@@ -33,13 +31,13 @@ if (member.user.bot === true) {
                 //.setAuthor(target.displayAvatarURL)
                 .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 512 }))
                 .setColor('WHITE')
-                .addField("Name", `${member.user.tag}`, inline)
-                .addField("ID", member.user.id, inline)
-                .addField("OS", `${osSend}`, true)
-                .addField("Bot?", `${bot}`,inline, true)
-                .addField("Status", `${status[member.user.presence.status]}`, inline, true)
-                .addField("Playing", `${member.user.presence.game ? `:video_game: ${member.user.presence.game.name}` : "Does not play"}`,inline, true)
-                .addField("Join the discord", member.user.createdAt)
+                .addField("Name",             `${member.user.tag}`, inline)
+                .addField("ID",               `${member.user.id}`, inline)
+                .addField("OS",               `${osSend}`, true)
+                .addField("Bot?",             `${bot}`,inline, true)
+                .addField("Status",           `${status[member.user.presence.status]}`, inline, true)
+                .addField("Playing",          `${member.user.presence.game ? `:video_game: ${member.user.presence.game.name}` : "Does not play"}`,inline, true)
+                .addField("Join the discord", `${member.user.createdAt}`)
       
                 .setFooter(`Vertage Information: ${member.user.username}`)
               
