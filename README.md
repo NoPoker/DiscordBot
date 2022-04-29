@@ -2,7 +2,6 @@
 
 <div align="center">
 <h4>Node v12+</h4>
-<p>Coded by No_Poker</p>
 
 </div>
 
